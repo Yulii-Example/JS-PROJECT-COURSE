@@ -8,10 +8,14 @@ const cross = '<svg class="cross"><line class="first" x1="15" y1="15" x2="220" y
 
 function stepCross(target) {
    target.innerHTML = cross;
+   const crossAudio = new Audio("audio/cross.mp3");
+   crossAudio.play();
 }
 
 function stepZero(target) {
     target.innerHTML = circle;
+    const zeroAudio = new Audio("audio/zero.mp3");
+    zeroAudio.play();
 }
 
 function init(e) {
