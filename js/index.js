@@ -43,46 +43,35 @@ game.addEventListener("click", init)
 
 function win() {
     const comb = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [6, 4, 2]
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+        [0, 4, 8], [2, 4, 6]             // Diagonals
     ];
 
     for (let i = 0; i < comb.length; i++) {
-        if (fields[comb[i][0]].classList.contains("x") &&
-            fields[comb[i][1]].classList.contains("x") &&
-            fields[comb[i][2]].classList.contains("x")) {
-            setTimeout(() => {
-                fields[comb[i][0]].classList.add("active");
-                fields[comb[i][1]].classList.add("active");
-                fields[comb[i][2]].classList.add("active");
-                res.innerText = "X WON!"
-            }, 1500);
-            game.removeEventListener("click", init);
-        }
+        const [a, b, c] = comb[i];
+        const cells = [fields[a], fields[b], fields[c]];
+        const symbols = cells.map(cell => cell.classList.contains("x") ? "x" : cell.classList.contains("o") ? "o" : null);
 
-        else if (fields[comb[i][0]].classList.contains("o") &&
-            fields[comb[i][1]].classList.contains("o") &&
-            fields[comb[i][2]].classList.contains("o")) {
-            setTimeout(() => {
-                fields[comb[i][0]].classList.add("active");
-                fields[comb[i][1]].classList.add("active");
-                fields[comb[i][2]].classList.add("active");
-                res.innerText = "O WON!"
-            }, 1500);
-            game.removeEventListener("click", init);
-        }
-        else if(count == 9) {
-            res.innerText = "DEAD HEAT";
-            game.removeEventListener("click", init);
+        if (symbols.every(symbol => symbol === "x")) {
+            declareWinner(cells, "X");
+            return;
+        } else if (symbols.every(symbol => symbol === "o")) {
+            declareWinner(cells, "O");
+            return;
         }
     }
 
+    if (count === 9) {
+        res.innerText = "DEAD HEAT";
+        game.removeEventListener("click", init);
+    }
+}
+
+function declareWinner(cells, winner) {
+    cells.forEach(cell => cell.classList.add("active"));
+    res.innerText = winner + " WON!";
+    game.removeEventListener("click", init);
 }
 
 btnGame.addEventListener("click", newGame);
